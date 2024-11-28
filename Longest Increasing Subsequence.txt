@@ -1,0 +1,46 @@
+
+class Solution {
+  public:
+    int longestSubsequence(vector<int>& arr) {
+        // To store the increasing subsequence
+        vector<int> res;
+
+        // Iterate through each number in the input array
+        for (int n : arr) {
+            // If res is empty or n is greater than the last element in res, add it
+            if (res.empty() || res.back() < n) {
+                res.push_back(n); // Add n to the subsequence
+            } else {
+                // Find the position in res where n can replace an element
+                int idx = binarySearch(res, n);
+                // Replace the element at the found index with n
+                res[idx] = n;
+            }
+        }
+
+        // Return the length of the longest subsequence
+        return res.size();
+    }
+
+  private:
+    // Binary search to find the appropriate position for the element in res
+    int binarySearch(const vector<int>& arr, int target) {
+        int left = 0;
+        int right = arr.size() - 1;
+
+        // Perform binary search
+        while (left <= right) {
+            int mid = (left + right) / 2;
+            if (arr[mid] == target) {
+                return mid;
+            } else if (arr[mid] > target) {
+                right = mid - 1; // Search left half
+            } else {
+                left = mid + 1; // Search right half
+            }
+        }
+
+        // Return the insertion index where n should go
+        return left;
+    }
+};
